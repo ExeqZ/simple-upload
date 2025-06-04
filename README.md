@@ -7,12 +7,18 @@
 - Upload single or multiple files (including large files)
 - Modern, clear, and responsive UI
 - Uses Azure Managed Identity for storage access
-- Easy deployment to Azure using ARM templates (no Bicep required)
+- Easy deployment to Azure using ARM templates
 
 ## Prerequisites
 - Azure subscription
 - Python 3.11+ and pip
 - Node.js and npm (for the React client)
+
+## Quick Deploy
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FExeqZ%2Fsimple-upload%2Fmain%2Finfra%2Fazuredeploy.json)
+
+> The "Deploy to Azure" button uses an ARM template (`infra/azuredeploy.json`).
 
 ## Setup
 
@@ -53,6 +59,7 @@ Visit `http://localhost:3000` to use the app.
 
 - The ARM template provisions a Linux App Service with Python 3.11.
 - Deploy using the Azure Portal or CLI as before.
+- After deployment, assign the "Storage Blob Data Contributor" role to the Web App's managed identity on the Storage Account.
 
 ## Security
 
