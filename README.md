@@ -19,13 +19,13 @@
 > Make sure `infra/azuredeploy.json` exists and is up-to-date.  
 > If you see a download error, compile the Bicep file to JSON and push it to your repo.
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com/yourusername/simple-upload/main/infra/azuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com/ExeqZ/simple-upload/main/infra/azuredeploy.json)
 
 ## Manual Setup
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/simple-upload.git
+git clone https://github.com/ExeqZ/simple-upload.git
 cd simple-upload
 ```
 
