@@ -65,7 +65,7 @@
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', format('{0}/default/{1}', parameters('storageAccountName'), parameters('containerName')))]"
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('containerName'))]"
       ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
@@ -106,7 +106,7 @@
     },
     "blobContainerId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', format('{0}/default/{1}', parameters('storageAccountName'), parameters('containerName')))]"
+      "value": "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('containerName'))]"
     },
     "storageAccountName": {
       "type": "string",
