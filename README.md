@@ -15,6 +15,10 @@
 
 ## Quick Deploy
 
+> **Note:** The "Deploy to Azure" button requires a JSON ARM template.  
+> Make sure `infra/azuredeploy.json` exists and is up-to-date.  
+> If you see a download error, compile the Bicep file to JSON and push it to your repo.
+
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com/yourusername/simple-upload/main/infra/azuredeploy.json)
 
 ## Manual Setup
