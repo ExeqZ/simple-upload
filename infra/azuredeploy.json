@@ -55,7 +55,7 @@
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
       "apiVersion": "2021-04-01",
-      "name": "[parameters('containerName')]",
+      "name": "[format('{0}/default/{1}', parameters('storageAccountName'), parameters('containerName'))]",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ],
@@ -72,13 +72,17 @@
         "name": "B1",
         "tier": "Basic"
       },
-      "properties": {}
+      "kind": "linux",
+      "properties": {
+        "reserved": true
+      }
     },
     {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2022-03-01",
       "name": "[parameters('webAppName')]",
       "location": "[parameters('location')]",
+      "kind": "app,linux",
       "identity": {
         "type": "SystemAssigned"
       },
@@ -90,6 +94,7 @@
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
         "siteConfig": {
+          "linuxFxVersion": "NODE|18-lts",
           "appSettings": [
             {
               "name": "AZURE_STORAGE_ACCOUNT_NAME",
