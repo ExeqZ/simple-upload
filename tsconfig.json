@@ -10,6 +10,10 @@
     "rootDir": "./src",
     "types": ["node"]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "include": ["src/server/**/*", "src/types/**/*"],
+  "exclude": [
+    "node_modules",
+    "src/client",
+    "**/*.spec.ts"
+  ]
 }
