@@ -1,1 +1,1 @@
-// No types needed at this time. Remove file or leave empty for future use.
+// No types needed at this time.
