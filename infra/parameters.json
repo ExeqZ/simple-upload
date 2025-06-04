@@ -4,19 +4,19 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "storageAccountName": {
-      "value": "<your-storage-account-name>"
+      "value": "stsimpleuploadne01"
     },
     "containerName": {
-      "value": "<your-container-name>"
+      "value": "uploads"
     },
     "location": {
-      "value": "East US"
+      "value": "northeurope"
     },
     "webAppName": {
-      "value": "<your-web-app-name>"
+      "value": "simple-upload-web-ne-01"
     },
     "appServicePlanName": {
-      "value": "<your-app-service-plan-name>"
+      "value": "simple-upload-asp-ne-01"
     }
   }
 }

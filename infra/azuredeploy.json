@@ -3,20 +3,39 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "storageAccountName": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "stsimpleuploadne01",
+      "metadata": {
+        "description": "The name of the Azure Storage account."
+      }
     },
     "containerName": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "uploads",
+      "metadata": {
+        "description": "The name of the Blob container."
+      }
     },
     "location": {
       "type": "string",
-      "defaultValue": "East US"
+      "defaultValue": "northeurope",
+      "metadata": {
+        "description": "The Azure region for all resources."
+      }
     },
     "webAppName": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "simple-upload-web-ne-01",
+      "metadata": {
+        "description": "The name of the Azure Web App."
+      }
     },
     "appServicePlanName": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "simple-upload-asp-ne-01",
+      "metadata": {
+        "description": "The name of the App Service Plan."
+      }
     }
   },
   "resources": [
