@@ -7,7 +7,7 @@
 - Upload single or multiple files (including large files)
 - Modern, clear, and responsive UI
 - Uses Azure Managed Identity for storage access
-- Easy deployment to Azure
+- Easy deployment to Azure using ARM templates (no Bicep required)
 
 ## Prerequisites
 - Azure subscription
@@ -15,11 +15,10 @@
 
 ## Quick Deploy
 
-> **Note:** The "Deploy to Azure" button requires a JSON ARM template.  
-> Make sure `infra/azuredeploy.json` exists and is up-to-date.  
-> If you see a download error, compile the Bicep file to JSON and push it to your repo.
-
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FExeqZ%2Fsimple-upload%2Fmain%2Finfra%2Fazuredeploy.json)
+
+> **Note:** The "Deploy to Azure" button uses an ARM template (`infra/azuredeploy.json`).  
+> No Bicep files are needed or used.
 
 ## Manual Setup
 
@@ -53,6 +52,20 @@ Visit `http://localhost:3000` to use the app.
 1. Click the **Deploy to Azure** button above.
 2. Fill in the required parameters (resource group, region, app name, etc).
 3. After deployment, navigate to the Web App URL output in the Azure Portal.
+
+Alternatively, you can deploy manually using the Azure CLI:
+```bash
+az deployment group create \
+  --resource-group <your-resource-group> \
+  --template-file infra/azuredeploy.json \
+  --parameters @infra/parameters.json
+```
+
+## Infrastructure
+
+All infrastructure is defined in the ARM template at `infra/azuredeploy.json`.  
+You do **not** need any Bicep files.  
+Parameters for deployment can be set in `infra/parameters.json`.
 
 ## Security
 

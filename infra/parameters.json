@@ -1,37 +1,22 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  // This file provides parameters for the ARM template (azuredeploy.json). No Bicep files are used.
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "storageAccountName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the Azure Storage account."
-      }
+      "value": "<your-storage-account-name>"
     },
     "containerName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the Blob container."
-      }
+      "value": "<your-container-name>"
     },
     "location": {
-      "type": "string",
-      "defaultValue": "East US",
-      "metadata": {
-        "description": "The location where the resources will be deployed."
-      }
+      "value": "East US"
     },
     "webAppName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the Azure Web App."
-      }
+      "value": "<your-web-app-name>"
     },
     "appServicePlanName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the App Service Plan."
-      }
+      "value": "<your-app-service-plan-name>"
     }
   }
 }

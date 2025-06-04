@@ -21,24 +21,104 @@
   },
   "resources": [
     {
-      "type": "Microsoft.Resources/deployments",
+      "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2021-04-01",
-      "name": "mainBicepDeployment",
+      "name": "[parameters('storageAccountName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2",
       "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/yourusername/simple-upload/main/infra/main.bicep",
-          "contentVersion": "1.0.0.0"
+        "supportsHttpsTrafficOnly": true
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2021-04-01",
+      "name": "[format('{0}/default/{1}', parameters('storageAccountName'), parameters('containerName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+      ],
+      "properties": {
+        "publicAccess": "None"
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "[parameters('appServicePlanName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "B1",
+        "tier": "Basic"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2022-03-01",
+      "name": "[parameters('webAppName')]",
+      "location": "[parameters('location')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', format('{0}/default/{1}', parameters('storageAccountName'), parameters('containerName')))]"
+      ],
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "AZURE_STORAGE_ACCOUNT_NAME",
+              "value": "[parameters('storageAccountName')]"
+            },
+            {
+              "name": "AZURE_STORAGE_CONTAINER_NAME",
+              "value": "[parameters('containerName')]"
+            }
+          ]
         },
-        "parameters": {
-          "storageAccountName": { "value": "[parameters('storageAccountName')]" },
-          "containerName": { "value": "[parameters('containerName')]" },
-          "location": { "value": "[parameters('location')]" },
-          "webAppName": { "value": "[parameters('webAppName')]" },
-          "appServicePlanName": { "value": "[parameters('appServicePlanName')]" }
-        }
+        "httpsOnly": true
+      }
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2020-04-01-preview",
+      "name": "[guid(resourceId('Microsoft.Web/sites', parameters('webAppName')), resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), 'Storage Blob Data Contributor')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+      ],
+      "properties": {
+        "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+        "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('webAppName')), '2022-03-01', 'Full').identity.principalId]",
+        "principalType": "ServicePrincipal"
       }
     }
   ],
-  "outputs": {}
+  "outputs": {
+    "storageAccountId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+    },
+    "blobContainerId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', format('{0}/default/{1}', parameters('storageAccountName'), parameters('containerName')))]"
+    },
+    "storageAccountName": {
+      "type": "string",
+      "value": "[parameters('storageAccountName')]"
+    },
+    "blobContainerName": {
+      "type": "string",
+      "value": "[parameters('containerName')]"
+    },
+    "webAppUrl": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webAppName')), '2022-03-01').defaultHostName]"
+    }
+  }
 }
