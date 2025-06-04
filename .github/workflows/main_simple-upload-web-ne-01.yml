@@ -21,11 +21,9 @@ jobs:
       - name: Cache server dependencies
         uses: actions/cache@v3
         with:
-          path: |
-            node_modules
+          path: node_modules
           key: ${{ runner.os }}-server-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-server-node-
+          restore-keys: ${{ runner.os }}-server-node-
 
       - name: Set up Node.js version
         uses: actions/setup-node@v3
@@ -38,11 +36,9 @@ jobs:
       - name: Cache client dependencies
         uses: actions/cache@v3
         with:
-          path: |
-            src/client/node_modules
+          path: src/client/node_modules
           key: ${{ runner.os }}-client-node-${{ hashFiles('src/client/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-client-node-
+          restore-keys: ${{ runner.os }}-client-node-
 
       - name: Install client dependencies
         run: npm install

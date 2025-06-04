@@ -3,8 +3,6 @@ import path from 'path';
 import uploadRouter from './routes/upload';
 import envalid from 'envalid';
 import cors from 'cors';
-import rateLimit from 'express-rate-limit';
-import morgan from 'morgan';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,24 +15,12 @@ envalid.cleanEnv(process.env, {
   CORS_ORIGIN: envalid.str({ default: '*' }),
 });
 
-// Logging middleware
-app.use(morgan('combined'));
-
 // CORS configuration
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || '*',
     methods: ['GET', 'POST'],
     credentials: true,
-  }),
-);
-
-// Rate limiting (customize as needed)
-app.use(
-  '/api/upload',
-  rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
   }),
 );
 
