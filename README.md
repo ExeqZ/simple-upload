@@ -53,6 +53,20 @@ Visit `http://localhost:3000` to use the app.
 2. Fill in the required parameters (resource group, region, app name, etc).
 3. After deployment, navigate to the Web App URL output in the Azure Portal.
 
+### ⚠️ Post-Deployment Manual Step Required
+
+After the resources are deployed, an Azure administrator must manually assign the **"Storage Blob Data Contributor"** role to the Web App's managed identity on the Storage Account:
+
+1. Go to the Storage Account in the Azure Portal.
+2. Open **Access control (IAM)**.
+3. Click **Add > Add role assignment**.
+4. Select **Storage Blob Data Contributor** as the role.
+5. Assign access to **Managed identity**.
+6. Select the Web App's managed identity.
+7. Save the assignment.
+
+This step is required for the Web App to upload files to the storage account.
+
 Alternatively, you can deploy manually using the Azure CLI:
 ```bash
 az deployment group create \
