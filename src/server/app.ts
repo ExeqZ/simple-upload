@@ -50,7 +50,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/upload', uploadRouter);
 
 // Serve static files from React build (production)
-const staticDir = path.join(__dirname, 'public');
+const staticDir = path.resolve(__dirname, 'public');
 app.use(express.static(staticDir));
 
 // SPA fallback: serve index.html for any non-API route
