@@ -4,7 +4,7 @@
   "parameters": {
     "storageAccountName": {
       "type": "string",
-      "defaultValue": "stsimpleuploadne01",
+      "defaultValue": "stsimpleuploadne",
       "metadata": {
         "description": "The name of the Azure Storage account."
       }
@@ -55,7 +55,7 @@
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
       "apiVersion": "2021-04-01",
-      "name": "[format('{0}/default/{1}', parameters('storageAccountName'), parameters('containerName'))]",
+      "name": "[parameters('containerName')]",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ],
@@ -71,7 +71,8 @@
       "sku": {
         "name": "B1",
         "tier": "Basic"
-      }
+      },
+      "properties": {}
     },
     {
       "type": "Microsoft.Web/sites",
