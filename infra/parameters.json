@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Azure Storage account."
+      }
+    },
+    "containerName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Blob container."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "East US",
+      "metadata": {
+        "description": "The location where the resources will be deployed."
+      }
+    },
+    "webAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Azure Web App."
+      }
+    },
+    "appServicePlanName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the App Service Plan."
+      }
+    }
+  }
+}
