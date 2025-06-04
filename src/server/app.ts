@@ -44,14 +44,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(staticDir, 'index.html'));
 });
 
-// Error handling middleware
-app.use(
-  (err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  },
-);
-
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
