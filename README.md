@@ -77,9 +77,10 @@ az deployment group create \
 
 ## Infrastructure
 
-All infrastructure is defined in the ARM template at `infra/azuredeploy.json`.  
-You do **not** need any Bicep files.  
-Parameters for deployment can be set in `infra/parameters.json`.
+All infrastructure and deployment files are located in the `infra` folder:
+- `infra/azuredeploy.json` (ARM template)
+- `infra/parameters.json` (deployment parameters)
+- Any deployment scripts or documentation
 
 ## Security
 
