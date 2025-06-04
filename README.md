@@ -62,7 +62,7 @@ Pull requests and issues are welcome!
 
 ## License
 
-MIT License
+GPL License
 
 ## Acknowledgments
 
