@@ -1,10 +1,15 @@
 # Simple Upload
 
 ## Overview
-**Simple Upload** is a secure web application for uploading one or multiple files to an Azure Blob Storage container. The app features a Python Flask backend and uses Azure Managed Identity for secure access—no secrets or SAS keys are stored in code or configuration.
+**Simple Upload** is a secure web application for uploading one or multiple files to an Azure Blob Storage container.  
+It features a Python Flask backend and a modern, drag-and-drop web UI (React via CDN).  
+The backend uses Azure Managed Identity for secure access—no secrets or SAS keys are stored in code or configuration.
 
 ## Features
-- Upload single or multiple files (including large files)
+- Upload single or multiple files (including multi-TB files, chunked upload)
+- Drag-and-drop or click-to-select files
+- Modern, responsive UI (React via CDN, no build step)
+- Upload progress and retry on network errors/timeouts
 - Uses Azure Managed Identity for storage access
 - Easy deployment to Azure using ARM templates
 
@@ -42,13 +47,15 @@ PORT=3000
 
 ### 4. Run the Application
 ```bash
-python src/app.py
+python app.py
 ```
 Visit `http://localhost:3000` to use the app.
 
 ## Azure Deployment
 
 - The ARM template provisions a Linux App Service with Python 3.11.
+- The startup command is set automatically:  
+  `gunicorn -w 4 -b 0.0.0.0:8000 app:app`
 - Deploy using the Azure Portal or CLI as before.
 - After deployment, assign the "Storage Blob Data Contributor" role to the Web App's managed identity on the Storage Account.
 
@@ -66,3 +73,4 @@ GPL License
 
 - Azure SDK for Python
 - Flask
+- React (via CDN)

@@ -66,6 +66,30 @@
       background: #b0b0b0;
       cursor: not-allowed;
     }
+    .dropzone {
+      border: 2px dashed #0078d4;
+      border-radius: 8px;
+      padding: 32px 0;
+      text-align: center;
+      color: #0078d4;
+      background: #f0f6ff;
+      margin-bottom: 16px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .dropzone.dragover {
+      background: #e3f1ff;
+      border-color: #005fa3;
+      color: #005fa3;
+    }
+    .dropzone input[type="file"] {
+      display: none;
+    }
+    .dropzone-label {
+      cursor: pointer;
+      font-weight: 500;
+      color: #0078d4;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -91,12 +115,37 @@
       const [progress, setProgress] = useState({});
       const [status, setStatus] = useState('');
       const [isUploading, setIsUploading] = useState(false);
+      const [dragActive, setDragActive] = useState(false);
       const abortControllers = useRef({});
+      const fileInputRef = useRef();
 
       const handleFileChange = (e) => {
         setFiles(Array.from(e.target.files));
         setProgress({});
         setStatus('');
+      };
+
+      const handleDrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(false);
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          setFiles(Array.from(e.dataTransfer.files));
+          setProgress({});
+          setStatus('');
+        }
+      };
+
+      const handleDragOver = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(true);
+      };
+
+      const handleDragLeave = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(false);
       };
 
       // Chunked upload for large files (up to multi-TB)
@@ -238,17 +287,37 @@
         setStatus('Upload aborted by user.');
       };
 
+      const handleZoneClick = () => {
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+          fileInputRef.current.click();
+        }
+      };
+
       return (
         React.createElement('div', { className: 'container' },
           React.createElement('h2', null, 'Simple Upload'),
-          React.createElement('input', {
-            type: 'file',
-            multiple: true,
-            onChange: handleFileChange,
-            disabled: isUploading,
-            style: { marginBottom: 16, width: '100%' },
-            'aria-label': 'Select files to upload'
-          }),
+          React.createElement('div', {
+            className: 'dropzone' + (dragActive ? ' dragover' : ''),
+            onClick: handleZoneClick,
+            onDragOver: handleDragOver,
+            onDragLeave: handleDragLeave,
+            onDragEnd: handleDragLeave,
+            onDrop: handleDrop,
+            tabIndex: 0,
+            role: 'button',
+            'aria-label': 'Drag and drop files here or click to select files'
+          },
+            React.createElement('input', {
+              type: 'file',
+              multiple: true,
+              ref: fileInputRef,
+              onChange: handleFileChange,
+              tabIndex: -1,
+              style: { display: 'none' }
+            }),
+            React.createElement('span', { className: 'dropzone-label' }, 'Drag & drop files here or click to select')
+          ),
           React.createElement('button', {
             onClick: handleUpload,
             disabled: isUploading || files.length === 0
