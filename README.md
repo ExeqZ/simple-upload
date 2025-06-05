@@ -18,7 +18,8 @@
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FExeqZ%2Fsimple-upload%2Fmain%2Finfra%2Fazuredeploy.json)
 
-> The "Deploy to Azure" button uses an ARM template (`infra/azuredeploy.json`).
+> The "Deploy to Azure" button uses an ARM template (`infra/azuredeploy.json`).  
+> After deployment, assign the "Storage Blob Data Contributor" role to the Web App's managed identity on the Storage Account.
 
 ## Setup
 
@@ -33,7 +34,7 @@ cd simple-upload
 pip install -r requirements.txt
 ```
 
-### 3. Install Client Dependencies
+### 3. Install Client Dependencies and Build
 ```bash
 cd src/client
 npm install
