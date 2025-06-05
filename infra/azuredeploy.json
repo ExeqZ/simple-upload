@@ -104,7 +104,8 @@
               "name": "AZURE_STORAGE_CONTAINER_NAME",
               "value": "[parameters('containerName')]"
             }
-          ]
+          ],
+          "appCommandLine": "gunicorn -w 4 -b 0.0.0.0:8000 src.app:app"
         },
         "httpsOnly": true
       }

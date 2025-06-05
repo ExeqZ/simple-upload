@@ -1,18 +1,16 @@
 # Simple Upload
 
 ## Overview
-**Simple Upload** is a modern, secure web application for uploading one or multiple files to an Azure Blob Storage container. The app features a clean, intuitive React interface and a Python Flask backend. It uses Azure Managed Identity for secure access—no secrets or SAS keys are stored in code or configuration.
+**Simple Upload** is a secure web application for uploading one or multiple files to an Azure Blob Storage container. The app features a Python Flask backend and uses Azure Managed Identity for secure access—no secrets or SAS keys are stored in code or configuration.
 
 ## Features
 - Upload single or multiple files (including large files)
-- Modern, clear, and responsive UI
 - Uses Azure Managed Identity for storage access
 - Easy deployment to Azure using ARM templates
 
 ## Prerequisites
 - Azure subscription
 - Python 3.11+ and pip
-- Node.js and npm (for the React client)
 
 ## Quick Deploy
 
@@ -34,15 +32,7 @@ cd simple-upload
 pip install -r requirements.txt
 ```
 
-### 3. Install Client Dependencies and Build
-```bash
-cd src/client
-npm install
-npm run build
-cd ../..
-```
-
-### 4. Configure Environment
+### 3. Configure Environment
 Set these environment variables:
 ```
 AZURE_STORAGE_ACCOUNT_NAME=<your_storage_account_name>
@@ -50,9 +40,9 @@ AZURE_STORAGE_CONTAINER_NAME=<your_container_name>
 PORT=3000
 ```
 
-### 5. Run the Application
+### 4. Run the Application
 ```bash
-python src/server/app.py
+python src/app.py
 ```
 Visit `http://localhost:3000` to use the app.
 
@@ -76,4 +66,3 @@ GPL License
 
 - Azure SDK for Python
 - Flask
-- React

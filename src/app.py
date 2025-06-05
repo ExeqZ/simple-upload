@@ -1,10 +1,10 @@
 import os
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient
 from uuid import uuid4
 
-app = Flask(__name__, static_folder='../client/build', static_url_path='/')
+app = Flask(__name__)
 
 AZURE_STORAGE_ACCOUNT_NAME = os.environ.get('AZURE_STORAGE_ACCOUNT_NAME')
 AZURE_STORAGE_CONTAINER_NAME = os.environ.get('AZURE_STORAGE_CONTAINER_NAME')
@@ -43,15 +43,6 @@ def upload():
 @app.route('/api/health', methods=['GET'])
 def health():
     return jsonify({'status': 'ok'})
-
-# Serve React static files
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve_react(path):
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 3000))
