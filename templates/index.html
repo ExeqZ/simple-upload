@@ -4,58 +4,234 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Simple Upload</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' https://unpkg.com; img-src 'self' https://images.unsplash.com data:;">
+  <meta name="referrer" content="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       /* Default (Gray) Theme */
-      --bg: #f4f6fa;
+      --bg: #f7f7f8;
       --container-bg: #fff;
-      --primary: #444;
+      --primary: #23272f;
       --accent: #888;
-      --border: #bbb;
-      --button-bg: #444;
+      --border: #d1d5db;
+      --button-bg: #23272f;
       --button-text: #fff;
-      --dropzone-bg: #f8f8f8;
-      --dropzone-border: #bbb;
-      --dropzone-accent: #444;
-      --progress-bg: #eaeaea;
-      --progress-inner: #444;
+      --dropzone-bg: #f3f4f6;
+      --dropzone-border: #bdbdbd;
+      --dropzone-accent: #23272f;
+      --progress-bg: #e5e7eb;
+      --progress-inner: #23272f;
       --success: #388e3c;
       --error: #d32f2f;
-      --contrast-bg: #000;
-      --contrast-text: #fff;
-      --contrast-accent: #ff0;
     }
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
       background: var(--bg);
       margin: 0;
       padding: 0;
       color: var(--primary);
       transition: background 0.2s, color 0.2s;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
     .container {
       max-width: 480px;
       margin: 3rem auto;
       background: var(--container-bg);
-      border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-      padding: 2rem;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      padding: 2.5rem 2rem 2rem 2rem;
       transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .header-img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 12px 12px 0 0;
+      margin-bottom: 1.2rem;
+      filter: brightness(0.93);
+      pointer-events: none;
+      user-select: none;
     }
     h2 {
       text-align: center;
       margin-bottom: 24px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+    .settings-cog {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 28px;
+      height: 28px;
+      background: none;
+      border: none;
+      color: #888;
+      cursor: pointer;
+      z-index: 10;
+      padding: 0;
+      transition: color 0.2s;
+    }
+    .settings-cog:hover,
+    .settings-cog:focus {
+      color: #23272f;
+    }
+    .settings-modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(40,48,60,0.18);
+      z-index: 1000;
+      animation: modal-fadein 0.18s;
+    }
+    @keyframes modal-fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .settings-modal {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+      padding: 28px 32px 22px 32px;
+      min-width: 260px;
+      z-index: 1001;
+      animation: modal-in 0.18s;
+      max-width: 90vw;
+    }
+    @keyframes modal-in {
+      from { opacity: 0; transform: translate(-50%,-60%);}
+      to { opacity: 1; transform: translate(-50%,-50%);}
+    }
+    .settings-modal h4 {
+      margin: 0 0 18px 0;
+      font-size: 1.13rem;
+      font-weight: 700;
+      color: #23272f;
+      letter-spacing: -0.5px;
+    }
+    .settings-modal .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      color: #888;
+      cursor: pointer;
+      padding: 0;
+      z-index: 2;
+      transition: color 0.18s;
+    }
+    .settings-modal .close-btn:hover {
+      color: #23272f;
     }
     .theme-select {
       display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-      gap: 8px;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 0;
     }
-    .theme-select label {
-      font-size: 14px;
-      font-weight: 500;
-      margin-right: 4px;
+    .theme-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      display: inline-block;
+      transition: border 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+      outline: none;
+    }
+    .theme-swatch.selected {
+      border: 3px solid var(--primary);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+    .theme-swatch[aria-label="Gray"] { background: linear-gradient(135deg, #f7f7f8 60%, #23272f 100%); }
+    .theme-swatch[aria-label="Mint"] { background: linear-gradient(135deg, #e0fff7 60%, #3ad29f 100%); }
+    .theme-swatch[aria-label="Lavender"] { background: linear-gradient(135deg, #f3e8ff 60%, #7c3aed 100%); }
+    .theme-swatch[aria-label="Sand"] { background: linear-gradient(135deg, #fff8e1 60%, #e0b97a 100%); }
+    .theme-swatch[aria-label="Contrast"] { background: linear-gradient(135deg, #000 60%, #fff 100%); }
+    .theme-swatch[aria-label="Contrast"]::after {
+      content: "";
+      display: block;
+      width: 10px;
+      height: 10px;
+      background: #ff0;
+      border-radius: 2px;
+      margin: 8px auto 0 auto;
+    }
+    /* Mint Theme */
+    .theme-mint {
+      --bg: #e0fff7;
+      --container-bg: #f6fffb;
+      --primary: #1b4d3a;
+      --accent: #3ad29f;
+      --border: #3ad29f;
+      --button-bg: #3ad29f;
+      --button-text: #fff;
+      --dropzone-bg: #e0fff7;
+      --dropzone-border: #3ad29f;
+      --dropzone-accent: #3ad29f;
+      --progress-bg: #eaeaea;
+      --progress-inner: #3ad29f;
+    }
+    /* Lavender Theme */
+    .theme-lavender {
+      --bg: #f3e8ff;
+      --container-bg: #f9f5ff;
+      --primary: #4b2067;
+      --accent: #7c3aed;
+      --border: #7c3aed;
+      --button-bg: #7c3aed;
+      --button-text: #fff;
+      --dropzone-bg: #f3e8ff;
+      --dropzone-border: #7c3aed;
+      --dropzone-accent: #7c3aed;
+      --progress-bg: #eaeaea;
+      --progress-inner: #7c3aed;
+    }
+    /* Sand Theme */
+    .theme-sand {
+      --bg: #fff8e1;
+      --container-bg: #fffbe7;
+      --primary: #7c5e3a;
+      --accent: #e0b97a;
+      --border: #e0b97a;
+      --button-bg: #e0b97a;
+      --button-text: #7c5e3a;
+      --dropzone-bg: #fff8e1;
+      --dropzone-border: #e0b97a;
+      --dropzone-accent: #e0b97a;
+      --progress-bg: #eaeaea;
+      --progress-inner: #e0b97a;
+    }
+    /* High Contrast Theme */
+    .theme-contrast {
+      --bg: #000;
+      --container-bg: #222;
+      --primary: #fff;
+      --accent: #ff0;
+      --border: #fff;
+      --button-bg: #ff0;
+      --button-text: #000;
+      --dropzone-bg: #111;
+      --dropzone-border: #fff;
+      --dropzone-accent: #ff0;
+      --progress-bg: #333;
+      --progress-inner: #ff0;
+      --success: #0f0;
+      --error: #f00;
     }
     .file-list {
       margin-top: 16px;
@@ -91,25 +267,31 @@
       background: var(--button-bg);
       color: var(--button-text);
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
       margin-bottom: 16px;
       transition: background 0.2s, color 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
     }
     button:disabled {
       background: #b0b0b0;
       cursor: not-allowed;
     }
     .dropzone {
-      border: 2px dashed var(--dropzone-border);
-      border-radius: 8px;
-      padding: 32px 0;
+      border: 2.5px dashed var(--dropzone-border);
+      border-radius: 10px;
+      padding: 36px 0;
       text-align: center;
       color: var(--dropzone-accent);
       background: var(--dropzone-bg);
       margin-bottom: 16px;
       transition: background 0.2s, border-color 0.2s, color 0.2s;
+      font-size: 1.08rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      outline: none;
     }
     .dropzone.dragover {
       background: #e3f1ff;
@@ -121,71 +303,9 @@
     }
     .dropzone-label {
       cursor: pointer;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--dropzone-accent);
       text-decoration: underline;
-    }
-    /* Blue Theme */
-    .theme-blue {
-      --bg: #eaf3fb;
-      --container-bg: #fafdff;
-      --primary: #1a355b;
-      --accent: #0078d4;
-      --border: #0078d4;
-      --button-bg: #0078d4;
-      --button-text: #fff;
-      --dropzone-bg: #e3f1ff;
-      --dropzone-border: #0078d4;
-      --dropzone-accent: #0078d4;
-      --progress-bg: #eaeaea;
-      --progress-inner: #0078d4;
-    }
-    /* Orange Theme */
-    .theme-orange {
-      --bg: #fff7ed;
-      --container-bg: #fff3e0;
-      --primary: #7c3a00;
-      --accent: #ff9800;
-      --border: #ff9800;
-      --button-bg: #ff9800;
-      --button-text: #fff;
-      --dropzone-bg: #fff3e0;
-      --dropzone-border: #ff9800;
-      --dropzone-accent: #ff9800;
-      --progress-bg: #eaeaea;
-      --progress-inner: #ff9800;
-    }
-    /* Green Theme */
-    .theme-green {
-      --bg: #f0faf4;
-      --container-bg: #f6fff9;
-      --primary: #1b5e20;
-      --accent: #43a047;
-      --border: #43a047;
-      --button-bg: #43a047;
-      --button-text: #fff;
-      --dropzone-bg: #e8f5e9;
-      --dropzone-border: #43a047;
-      --dropzone-accent: #43a047;
-      --progress-bg: #eaeaea;
-      --progress-inner: #43a047;
-    }
-    /* High Contrast Theme */
-    .theme-contrast {
-      --bg: #000;
-      --container-bg: #222;
-      --primary: #fff;
-      --accent: #ff0;
-      --border: #fff;
-      --button-bg: #ff0;
-      --button-text: #000;
-      --dropzone-bg: #111;
-      --dropzone-border: #fff;
-      --dropzone-accent: #ff0;
-      --progress-bg: #333;
-      --progress-inner: #ff0;
-      --success: #0f0;
-      --error: #f00;
     }
   </style>
 </head>
@@ -198,11 +318,11 @@
 
     // Theme definitions
     const THEMES = [
-      { value: '', label: 'Gray (Default)' },
-      { value: 'theme-blue', label: 'Blue' },
-      { value: 'theme-orange', label: 'Orange' },
-      { value: 'theme-green', label: 'Green' },
-      { value: 'theme-contrast', label: 'High Contrast' }
+      { value: '', label: 'Gray', aria: 'Gray' },
+      { value: 'theme-mint', label: 'Mint', aria: 'Mint' },
+      { value: 'theme-lavender', label: 'Lavender', aria: 'Lavender' },
+      { value: 'theme-sand', label: 'Sand', aria: 'Sand' },
+      { value: 'theme-contrast', label: 'Contrast', aria: 'Contrast' }
     ];
 
     function chunkFile(file, chunkSize) {
@@ -237,13 +357,56 @@
       const [isUploading, setIsUploading] = useState(false);
       const [dragActive, setDragActive] = useState(false);
       const [theme, setTheme] = useState(getSavedTheme());
+      const [showSettings, setShowSettings] = useState(false);
       const abortControllers = useRef({});
       const fileInputRef = useRef();
+
+      // Trap focus in modal
+      useEffect(() => {
+        if (!showSettings) return;
+        function trapFocus(e) {
+          if (e.key === "Tab") {
+            const modal = document.getElementById("settings-modal");
+            if (!modal) return;
+            const focusable = modal.querySelectorAll('button, [tabindex="0"], [tabindex="1"]');
+            if (!focusable.length) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (e.shiftKey) {
+              if (document.activeElement === first) {
+                last.focus();
+                e.preventDefault();
+              }
+            } else {
+              if (document.activeElement === last) {
+                first.focus();
+                e.preventDefault();
+              }
+            }
+          }
+          if (e.key === "Escape") setShowSettings(false);
+        }
+        document.addEventListener("keydown", trapFocus);
+        return () => document.removeEventListener("keydown", trapFocus);
+      }, [showSettings]);
 
       useEffect(() => {
         setThemeClass(theme);
         saveTheme(theme);
       }, [theme]);
+
+      // Close flyout on outside click
+      useEffect(() => {
+        function handleClick(e) {
+          if (showSettings && settingsRef.current && !settingsRef.current.contains(e.target)) {
+            setShowSettings(false);
+          }
+        }
+        if (showSettings) {
+          document.addEventListener('mousedown', handleClick);
+        }
+        return () => document.removeEventListener('mousedown', handleClick);
+      }, [showSettings]);
 
       const handleThemeChange = (e) => {
         setTheme(e.target.value);
@@ -425,18 +588,66 @@
       };
 
       return (
-        React.createElement('div', { className: 'container' },
-          React.createElement('h2', null, 'Simple Upload'),
-          React.createElement('div', { className: 'theme-select' },
-            React.createElement('label', { htmlFor: 'theme-select' }, 'Theme:'),
-            React.createElement('select', {
-              id: 'theme-select',
-              value: theme,
-              onChange: handleThemeChange,
-              disabled: isUploading
+        React.createElement('div', { className: 'container', style: { position: 'relative' } },
+          // Modern header image (Unsplash, free to use)
+          React.createElement('img', {
+            src: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80',
+            alt: '',
+            className: 'header-img',
+            draggable: false,
+            'aria-hidden': true,
+            loading: 'lazy'
+          }),
+          React.createElement('button', {
+            className: 'settings-cog',
+            type: 'button',
+            tabIndex: 0,
+            onClick: () => setShowSettings(v => !v),
+            'aria-label': 'Open settings'
+          },
+            React.createElement('svg', {
+              width: 24, height: 24, fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', viewBox: '0 0 24 24', 'aria-hidden': true
             },
-              THEMES.map(t =>
-                React.createElement('option', { key: t.value, value: t.value }, t.label)
+              React.createElement('circle', { cx: 12, cy: 12, r: 3 }),
+              React.createElement('path', { d: 'M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 8.6 15a1.65 1.65 0 0 0-1.82-.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 15 8.6c.26.26.61.39.96.33.35-.06.7-.19.96-.33z' })
+            )
+          ),
+          showSettings && React.createElement(React.Fragment, null,
+            React.createElement('div', {
+              className: 'settings-modal-backdrop',
+              onClick: () => setShowSettings(false),
+              tabIndex: -1,
+              'aria-hidden': true
+            }),
+            React.createElement('div', {
+              className: 'settings-modal',
+              id: 'settings-modal',
+              tabIndex: -1,
+              role: 'dialog',
+              'aria-modal': true,
+              'aria-label': 'Settings'
+            },
+              React.createElement('button', {
+                className: 'close-btn',
+                type: 'button',
+                onClick: () => setShowSettings(false),
+                'aria-label': 'Close settings'
+              }, '×'),
+              React.createElement('h4', null, 'Theme'),
+              React.createElement('div', { className: 'theme-select', role: 'radiogroup', 'aria-label': 'Theme selection' },
+                THEMES.map(t =>
+                  React.createElement('span', {
+                    key: t.value,
+                    className: 'theme-swatch' + (theme === t.value ? ' selected' : ''),
+                    tabIndex: 0,
+                    role: 'radio',
+                    'aria-checked': theme === t.value,
+                    'aria-label': t.aria,
+                    style: { outline: theme === t.value ? '2px solid var(--accent)' : 'none' },
+                    onClick: () => setTheme(t.value),
+                    onKeyDown: (e) => { if (e.key === 'Enter' || e.key === ' ') setTheme(t.value); }
+                  })
+                )
               )
             )
           ),
