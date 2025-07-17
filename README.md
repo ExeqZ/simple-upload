@@ -59,6 +59,72 @@ Visit `http://localhost:3000` to use the app.
 - Deploy using the Azure Portal or CLI as before.
 - After deployment, assign the "Storage Blob Data Contributor" role to the Web App's managed identity on the Storage Account.
 
+## Uploading Files via Script
+
+You can upload files to the service using a script in any language that supports HTTP POST with multipart/form-data.
+
+### Bash (using `curl`)
+
+```bash
+curl -F "files=@/path/to/yourfile.txt" https://<your-app-service-url>/api/upload
+```
+
+For multiple files:
+
+```bash
+curl -F "files=@/path/to/file1.txt" -F "files=@/path/to/file2.jpg" https://<your-app-service-url>/api/upload
+```
+
+### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri "https://<your-app-service-url>/api/upload" `
+  -Method Post `
+  -Form @{ files = Get-Item "C:\path\to\yourfile.txt" }
+```
+
+For multiple files:
+
+```powershell
+Invoke-RestMethod -Uri "https://<your-app-service-url>/api/upload" `
+  -Method Post `
+  -Form @{
+      files = Get-Item "C:\path\to\file1.txt"
+      files = Get-Item "C:\path\to\file2.jpg"
+  }
+```
+
+### Python
+
+```python
+import requests
+
+url = "https://<your-app-service-url>/api/upload"
+files = {'files': open('yourfile.txt', 'rb')}
+response = requests.post(url, files=files)
+print(response.json())
+```
+
+For multiple files:
+
+```python
+import requests
+
+url = "https://<your-app-service-url>/api/upload"
+files = [
+    ('files', open('file1.txt', 'rb')),
+    ('files', open('file2.jpg', 'rb'))
+]
+response = requests.post(url, files=files)
+print(response.json())
+```
+
+### Notes
+
+- Replace `<your-app-service-url>` with your deployed app's URL (e.g., `simple-upload-web-ne-01.azurewebsites.net`).
+- The API endpoint is `/api/upload`.
+- The form field name must be `files` for each file.
+
 ## Security
 
 - The Web App uses a system-assigned managed identity.
