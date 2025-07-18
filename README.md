@@ -8,7 +8,7 @@ The backend uses Azure Managed Identity for secure access—no secrets or SAS ke
 ## Features
 - Upload single or multiple files (including multi-TB files, chunked upload)
 - Drag-and-drop or click-to-select files
-- Modern, responsive UI with theme switcher (Gray, Mint, Lavender, Sand, High Contrast)
+- Modern, responsive UI (React via CDN, no build step)
 - Upload progress and retry on network errors/timeouts
 - Uses Azure Managed Identity for storage access
 - Easy deployment to Azure using ARM templates
@@ -50,13 +50,6 @@ PORT=3000
 python app.py
 ```
 Visit `http://localhost:3000` to use the app.
-
-## Web Interface
-
-- The web UI is accessible at `/` and supports drag-and-drop or click-to-select file uploads.
-- You can switch between modern, discreet color themes (Gray, Mint, Lavender, Sand, High Contrast) using the cogwheel in the top right.
-- The selected theme is saved in a cookie and persists across sessions.
-- A modern Unsplash image is used as a header for visual appeal.
 
 ## Azure Deployment
 
@@ -147,4 +140,3 @@ GPL License
 - Azure SDK for Python
 - Flask
 - React (via CDN)
-- Unsplash (header image)
