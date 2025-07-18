@@ -310,12 +310,12 @@
   </style>
 </head>
 <body>
-  <div id="root"></div>
+  <div class="container" id="root"></div>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script>
-    const { useState, useRef, useEffect } = React;
-
+  <script src="/static/app.bundle.js"></script>
+</body>
+</html>
     // Theme definitions
     const THEMES = [
       { value: '', label: 'Gray', aria: 'Gray' },
@@ -360,6 +360,7 @@
       const [showSettings, setShowSettings] = useState(false);
       const abortControllers = useRef({});
       const fileInputRef = useRef();
+      const settingsRef = useRef(); // <-- Add this line
 
       // Trap focus in modal
       useEffect(() => {
@@ -588,8 +589,8 @@
       };
 
       return (
-        React.createElement('div', { className: 'container', style: { position: 'relative' } },
-          // Modern header image (Unsplash, free to use)
+        React.createElement(React.Fragment, null,
+          // Move header image and cogwheel inside the container
           React.createElement('img', {
             src: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80',
             alt: '',
@@ -625,7 +626,8 @@
               tabIndex: -1,
               role: 'dialog',
               'aria-modal': true,
-              'aria-label': 'Settings'
+              'aria-label': 'Settings',
+              ref: settingsRef
             },
               React.createElement('button', {
                 className: 'close-btn',
