@@ -1,142 +1,67 @@
-# Simple Upload
+# azure-file-upload-app
 
 ## Overview
-**Simple Upload** is a secure web application for uploading one or multiple files to an Azure Blob Storage container.  
-It features a Python Flask backend and a modern, drag-and-drop web UI (React via CDN).  
-The backend uses Azure Managed Identity for secure access—no secrets or SAS keys are stored in code or configuration.
+The Azure File Upload App is a modern web application that allows users to upload one or multiple files to an Azure Blob Storage container. The application features a user-friendly interface built with React and ensures secure file uploads without hardcoded secrets.
 
 ## Features
-- Upload single or multiple files (including multi-TB files, chunked upload)
-- Drag-and-drop or click-to-select files
-- Modern, responsive UI (React via CDN, no build step)
-- Upload progress and retry on network errors/timeouts
-- Uses Azure Managed Identity for storage access
-- Easy deployment to Azure using ARM templates
+- Upload single or multiple files.
+- Progress indication during file uploads.
+- Secure handling of Azure credentials.
+- Direct permission assignment to the web app for accessing Azure Blob Storage.
 
 ## Prerequisites
-- Azure subscription
-- Python 3.11+ and pip
+- An Azure account.
+- Node.js and npm installed on your local machine.
 
-## Quick Deploy
+## Setup Instructions
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FExeqZ%2Fsimple-upload%2Fmain%2Finfra%2Fazuredeploy.json)
-
-> The "Deploy to Azure" button uses an ARM template (`infra/azuredeploy.json`).  
-> After deployment, assign the "Storage Blob Data Contributor" role to the Web App's managed identity on the Storage Account.
-
-## Setup
-
-### 1. Clone the Repository
+### Clone the Repository
 ```bash
-git clone https://github.com/ExeqZ/simple-upload.git
-cd simple-upload
+git clone https://github.com/yourusername/azure-file-upload-app.git
+cd azure-file-upload-app
 ```
 
-### 2. Install Python Dependencies
+### Install Dependencies
 ```bash
-pip install -r requirements.txt
+npm install
 ```
 
-### 3. Configure Environment
-Set these environment variables:
+### Configure Azure Storage
+1. Deploy the infrastructure using the provided Bicep template:
+   - Navigate to the `infra` directory.
+   - Use Azure CLI to deploy:
+     ```bash
+     az deployment group create --resource-group <your-resource-group> --template-file main.bicep --parameters @parameters.json
+     ```
+2. Note the connection string and container name for use in the application.
+
+### Environment Variables
+Create a `.env` file in the root of the project and add the following variables:
 ```
-AZURE_STORAGE_ACCOUNT_NAME=<your_storage_account_name>
+AZURE_STORAGE_CONNECTION_STRING=<your_connection_string>
 AZURE_STORAGE_CONTAINER_NAME=<your_container_name>
-PORT=3000
 ```
 
-### 4. Run the Application
+### Running the Application
+To start the server and client:
 ```bash
-python app.py
+npm run dev
 ```
-Visit `http://localhost:3000` to use the app.
+Visit `http://localhost:3000` in your browser to access the application.
 
-## Azure Deployment
+## Deployment
+To deploy the application to Azure, you can use the GitHub Actions workflow defined in `.github/workflows/deploy.yml`. Ensure that your Azure credentials are set in the repository secrets.
 
-- The ARM template provisions a Linux App Service with Python 3.11.
-- The startup command is set automatically:  
-  `gunicorn -w 4 -b 0.0.0.0:8000 app:app`
-- Deploy using the Azure Portal or CLI as before.
-- After deployment, assign the "Storage Blob Data Contributor" role to the Web App's managed identity on the Storage Account.
-
-## Uploading Files via Script
-
-You can upload files to the service using a script in any language that supports HTTP POST with multipart/form-data.
-
-### Bash (using `curl`)
-
-```bash
-curl -F "files=@/path/to/yourfile.txt" https://<your-app-service-url>/api/upload
-```
-
-For multiple files:
-
-```bash
-curl -F "files=@/path/to/file1.txt" -F "files=@/path/to/file2.jpg" https://<your-app-service-url>/api/upload
-```
-
-### PowerShell
-
-```powershell
-Invoke-RestMethod -Uri "https://<your-app-service-url>/api/upload" `
-  -Method Post `
-  -Form @{ files = Get-Item "C:\path\to\yourfile.txt" }
-```
-
-For multiple files:
-
-```powershell
-Invoke-RestMethod -Uri "https://<your-app-service-url>/api/upload" `
-  -Method Post `
-  -Form @{
-      files = Get-Item "C:\path\to\file1.txt"
-      files = Get-Item "C:\path\to\file2.jpg"
-  }
-```
-
-### Python
-
-```python
-import requests
-
-url = "https://<your-app-service-url>/api/upload"
-files = {'files': open('yourfile.txt', 'rb')}
-response = requests.post(url, files=files)
-print(response.json())
-```
-
-For multiple files:
-
-```python
-import requests
-
-url = "https://<your-app-service-url>/api/upload"
-files = [
-    ('files', open('file1.txt', 'rb')),
-    ('files', open('file2.jpg', 'rb'))
-]
-response = requests.post(url, files=files)
-print(response.json())
-```
-
-### Notes
-
-- Replace `<your-app-service-url>` with your deployed app's URL (e.g., `simple-upload-web-ne-01.azurewebsites.net`).
-- The API endpoint is `/api/upload`.
-- The form field name must be `files` for each file.
-
-## Security
-
-- The Web App uses a system-assigned managed identity.
-- The identity is granted "Storage Blob Data Contributor" on the storage account.
-- No secrets or SAS keys are used or stored.
+## Contributing
+Feel free to submit issues or pull requests for improvements or bug fixes.
 
 ## License
-
-GPL License
+This project is licensed under the MIT License.
 
 ## Acknowledgments
+- Azure SDK for JavaScript
+- React
+- Express
 
-- Azure SDK for Python
-- Flask
-- React (via CDN)
+## Deploy to Azure
+[![Deploy to Azure](deploy-to-azure.svg)](https://azuredeploy.net/)

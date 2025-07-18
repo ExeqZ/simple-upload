@@ -1,6 +1,41 @@
 {
-  "name": "simple-upload",
+  "name": "azure-file-upload-app",
   "version": "1.0.0",
-  "description": "A Python Flask web application for uploading files to Azure Blob Storage.",
-  "license": "GPL-3.0-or-later"
+  "description": "A modern web application for uploading files to Azure Blob Storage.",
+  "main": "src/server/app.ts",
+  "scripts": {
+    "start": "node dist/server/app.js",
+    "build": "tsc",
+    "dev": "ts-node src/server/app.ts",
+    "client": "react-scripts start",
+    "client-build": "react-scripts build",
+    "client-test": "react-scripts test",
+    "client-eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "multer": "^1.4.2",
+    "@azure/storage-blob": "^12.0.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.3",
+    "ts-node": "^10.4.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/azure-file-upload-app.git"
+  },
+  "keywords": [
+    "azure",
+    "file-upload",
+    "blob-storage",
+    "react",
+    "express"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
 }

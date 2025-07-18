@@ -5,57 +5,23 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Simple Upload</title>
   <style>
-    :root {
-      /* Default (Gray) Theme */
-      --bg: #f4f6fa;
-      --container-bg: #fff;
-      --primary: #444;
-      --accent: #888;
-      --border: #bbb;
-      --button-bg: #444;
-      --button-text: #fff;
-      --dropzone-bg: #f8f8f8;
-      --dropzone-border: #bbb;
-      --dropzone-accent: #444;
-      --progress-bg: #eaeaea;
-      --progress-inner: #444;
-      --success: #388e3c;
-      --error: #d32f2f;
-      --contrast-bg: #000;
-      --contrast-text: #fff;
-      --contrast-accent: #ff0;
-    }
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
-      background: var(--bg);
+      background: #f4f6fa;
       margin: 0;
       padding: 0;
-      color: var(--primary);
-      transition: background 0.2s, color 0.2s;
     }
     .container {
       max-width: 480px;
       margin: 3rem auto;
-      background: var(--container-bg);
+      background: #fff;
       border-radius: 12px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.08);
       padding: 2rem;
-      transition: background 0.2s;
     }
     h2 {
       text-align: center;
       margin-bottom: 24px;
-    }
-    .theme-select {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-      gap: 8px;
-    }
-    .theme-select label {
-      font-size: 14px;
-      font-weight: 500;
-      margin-right: 4px;
     }
     .file-list {
       margin-top: 16px;
@@ -63,7 +29,7 @@
     }
     .progress-bar {
       width: 100%;
-      background: var(--progress-bg);
+      background: #eaeaea;
       border-radius: 6px;
       margin-bottom: 12px;
       height: 16px;
@@ -71,8 +37,8 @@
     }
     .progress-bar-inner {
       height: 100%;
-      background: var(--progress-inner);
-      transition: width 0.2s, background 0.2s;
+      background: #0078d4;
+      transition: width 0.2s;
     }
     .status {
       text-align: center;
@@ -80,41 +46,40 @@
       font-weight: bold;
     }
     .error {
-      color: var(--error);
+      color: #d32f2f;
     }
     .success {
-      color: var(--success);
+      color: #388e3c;
     }
     button {
       width: 100%;
       padding: 0.75rem;
-      background: var(--button-bg);
-      color: var(--button-text);
+      background: #0078d4;
+      color: #fff;
       border: none;
       border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
       margin-bottom: 16px;
-      transition: background 0.2s, color 0.2s;
     }
     button:disabled {
       background: #b0b0b0;
       cursor: not-allowed;
     }
     .dropzone {
-      border: 2px dashed var(--dropzone-border);
+      border: 2px dashed #0078d4;
       border-radius: 8px;
       padding: 32px 0;
       text-align: center;
-      color: var(--dropzone-accent);
-      background: var(--dropzone-bg);
+      color: #0078d4;
+      background: #f0f6ff;
       margin-bottom: 16px;
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      transition: background 0.2s, border-color 0.2s;
     }
     .dropzone.dragover {
       background: #e3f1ff;
-      border-color: var(--primary);
-      color: var(--primary);
+      border-color: #005fa3;
+      color: #005fa3;
     }
     .dropzone input[type="file"] {
       display: none;
@@ -122,70 +87,8 @@
     .dropzone-label {
       cursor: pointer;
       font-weight: 500;
-      color: var(--dropzone-accent);
+      color: #0078d4;
       text-decoration: underline;
-    }
-    /* Blue Theme */
-    .theme-blue {
-      --bg: #eaf3fb;
-      --container-bg: #fafdff;
-      --primary: #1a355b;
-      --accent: #0078d4;
-      --border: #0078d4;
-      --button-bg: #0078d4;
-      --button-text: #fff;
-      --dropzone-bg: #e3f1ff;
-      --dropzone-border: #0078d4;
-      --dropzone-accent: #0078d4;
-      --progress-bg: #eaeaea;
-      --progress-inner: #0078d4;
-    }
-    /* Orange Theme */
-    .theme-orange {
-      --bg: #fff7ed;
-      --container-bg: #fff3e0;
-      --primary: #7c3a00;
-      --accent: #ff9800;
-      --border: #ff9800;
-      --button-bg: #ff9800;
-      --button-text: #fff;
-      --dropzone-bg: #fff3e0;
-      --dropzone-border: #ff9800;
-      --dropzone-accent: #ff9800;
-      --progress-bg: #eaeaea;
-      --progress-inner: #ff9800;
-    }
-    /* Green Theme */
-    .theme-green {
-      --bg: #f0faf4;
-      --container-bg: #f6fff9;
-      --primary: #1b5e20;
-      --accent: #43a047;
-      --border: #43a047;
-      --button-bg: #43a047;
-      --button-text: #fff;
-      --dropzone-bg: #e8f5e9;
-      --dropzone-border: #43a047;
-      --dropzone-accent: #43a047;
-      --progress-bg: #eaeaea;
-      --progress-inner: #43a047;
-    }
-    /* High Contrast Theme */
-    .theme-contrast {
-      --bg: #000;
-      --container-bg: #222;
-      --primary: #fff;
-      --accent: #ff0;
-      --border: #fff;
-      --button-bg: #ff0;
-      --button-text: #000;
-      --dropzone-bg: #111;
-      --dropzone-border: #fff;
-      --dropzone-accent: #ff0;
-      --progress-bg: #333;
-      --progress-inner: #ff0;
-      --success: #0f0;
-      --error: #f00;
     }
   </style>
 </head>
@@ -194,16 +97,7 @@
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script>
-    const { useState, useRef, useEffect } = React;
-
-    // Theme definitions
-    const THEMES = [
-      { value: '', label: 'Gray (Default)' },
-      { value: 'theme-blue', label: 'Blue' },
-      { value: 'theme-orange', label: 'Orange' },
-      { value: 'theme-green', label: 'Green' },
-      { value: 'theme-contrast', label: 'High Contrast' }
-    ];
+    const { useState, useRef } = React;
 
     function chunkFile(file, chunkSize) {
       const chunks = [];
@@ -216,38 +110,14 @@
       return chunks;
     }
 
-    function setThemeClass(theme) {
-      document.body.classList.remove(...THEMES.map(t => t.value).filter(Boolean));
-      if (theme) document.body.classList.add(theme);
-    }
-
-    function getSavedTheme() {
-      const match = document.cookie.match(/(^| )simpleupload_theme=([^;]+)/);
-      return match ? decodeURIComponent(match[2]) : '';
-    }
-
-    function saveTheme(theme) {
-      document.cookie = `simpleupload_theme=${encodeURIComponent(theme)};path=/;max-age=31536000`;
-    }
-
     function FileUpload() {
       const [files, setFiles] = useState([]);
       const [progress, setProgress] = useState({});
       const [status, setStatus] = useState('');
       const [isUploading, setIsUploading] = useState(false);
       const [dragActive, setDragActive] = useState(false);
-      const [theme, setTheme] = useState(getSavedTheme());
       const abortControllers = useRef({});
       const fileInputRef = useRef();
-
-      useEffect(() => {
-        setThemeClass(theme);
-        saveTheme(theme);
-      }, [theme]);
-
-      const handleThemeChange = (e) => {
-        setTheme(e.target.value);
-      };
 
       const handleFileChange = (e) => {
         setFiles(Array.from(e.target.files));
@@ -427,19 +297,6 @@
       return (
         React.createElement('div', { className: 'container' },
           React.createElement('h2', null, 'Simple Upload'),
-          React.createElement('div', { className: 'theme-select' },
-            React.createElement('label', { htmlFor: 'theme-select' }, 'Theme:'),
-            React.createElement('select', {
-              id: 'theme-select',
-              value: theme,
-              onChange: handleThemeChange,
-              disabled: isUploading
-            },
-              THEMES.map(t =>
-                React.createElement('option', { key: t.value, value: t.value }, t.label)
-              )
-            )
-          ),
           React.createElement('div', {
             className: 'dropzone' + (dragActive ? ' dragover' : ''),
             onClick: handleZoneClick,

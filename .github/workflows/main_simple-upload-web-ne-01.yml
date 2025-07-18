@@ -1,8 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
-# More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python app to Azure Web App - simple-upload-web-ne-01
+name: Build and deploy Node.js app to Azure Web App - simple-upload-web-ne-01
 
 on:
   push:
@@ -12,38 +11,29 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     permissions:
       contents: read #This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python version
-        uses: actions/setup-python@v5
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
         with:
-          python-version: '3.11'
+          node-version: '22.x'
 
-      - name: Create and start virtual environment
+      - name: npm install, build, and test
         run: |
-          python -m venv venv
-          source venv/bin/activate
+          npm install
+          npm run build --if-present
+          npm run test --if-present
       
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-        
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
-
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
-
-      - name: Upload artifact for deployment jobs
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: python-app
-          path: |
-            release.zip
-            !venv/
+          name: node-app
+          path: .
 
   deploy:
     runs-on: ubuntu-latest
@@ -59,18 +49,14 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: python-app
-
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
-
+          name: node-app
       
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0C09C17A5CE546D8BA7FCEE2F0742592 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9A4F89F5BDDE40028CC7F581FEEFE3CC }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A3C7FAC3C00B4FA2BE089B4D7B27F73D }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D84540110C6447D398588BBA2B6B8752 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_36F9C091D3D94851A451980245EF93FD }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A98810C4BC484A3D837661ED868D7C15 }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
@@ -78,4 +64,5 @@ jobs:
         with:
           app-name: 'simple-upload-web-ne-01'
           slot-name: 'Production'
+          package: .
           
